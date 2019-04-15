@@ -15,7 +15,7 @@
 import os
 
 from ament_index_python.packages import get_package_share_directory
-from launch.exit_handler import restart_exit_handler
+from launch.legacy.exit_handler import restart_exit_handler
 from ros2run.api import get_executable_path
 
 

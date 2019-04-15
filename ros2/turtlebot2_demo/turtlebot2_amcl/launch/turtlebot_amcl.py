@@ -17,10 +17,10 @@ import os
 import sys
 
 from ament_index_python.packages import get_package_share_directory
-from launch import LaunchDescriptor
-from launch.exit_handler import restart_exit_handler
-from launch.launcher import DefaultLauncher
-from launch.output_handler import ConsoleOutput
+from launch,legacy import LaunchDescriptor
+from launch.legacy.exit_handler import restart_exit_handler
+from launch.legacy.launcher import DefaultLauncher
+from launch.legacy.output_handler import ConsoleOutput
 from ros2run.api import get_executable_path
 
 
