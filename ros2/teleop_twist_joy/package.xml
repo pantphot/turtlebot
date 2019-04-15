@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>teleop_twist_joy</name>
+  <version>2.1.0</version>
+  <description>Generic joystick teleop for twist robots.</description>
+  <maintainer email="clalancette@openrobotics.org">Chris Lalancette</maintainer>
+
+  <license>BSD</license>
+
+  <url type="website">http://wiki.ros.org/teleop_twist_joy</url>
+  <author email="mpurvis@clearpathrobotics.com">Mike Purvis</author>
+
+  <buildtool_depend>ament_cmake_ros</buildtool_depend>
+
+  <depend>geometry_msgs</depend>
+  <depend>rclcpp</depend>
+  <depend>sensor_msgs</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
