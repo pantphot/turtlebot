@@ -25,11 +25,11 @@ from ros2run.api import get_executable_path
 
 
 def launch(launch_descriptor, argv):
-    parser = argparse.ArgumentParser(description='launch amcl turtlebot demo')
-    parser.add_argument(
-        '--map',
-        help='path to map (will be passed to map_server)')
-    args = parser.parse_args(argv)
+    # parser = argparse.ArgumentParser(description='launch amcl turtlebot demo')
+    # parser.add_argument(
+    #     '--map',
+    #     help='path to map (will be passed to map_server)')
+    # args = parser.parse_args(argv)
 
     ld = launch_descriptor
 
