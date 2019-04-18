@@ -43,7 +43,8 @@ namespace {
 
 void Run() {
   constexpr double kTfBufferCacheTimeInSeconds = 1e6;
-  tf2_ros::Buffer tf_buffer{::tf2::durationFromSec(kTfBufferCacheTimeInSeconds)};
+  rclcpp::Clock::SharedPtr clock;
+  tf2_ros::Buffer tf_buffer{clock,::tf2::durationFromSec(kTfBufferCacheTimeInSeconds)};
   tf2_ros::TransformListener tf(tf_buffer);
   NodeOptions node_options;
   TrajectoryOptions trajectory_options;

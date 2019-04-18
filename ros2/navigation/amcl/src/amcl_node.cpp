@@ -381,7 +381,7 @@ AmclNode::AmclNode(std::shared_ptr<rclcpp::Node> node_, bool use_map_topic) :
 {
   std::lock_guard<std::recursive_mutex> l(configuration_mutex_);
   node = node_;
-  
+
   clock = std::make_shared<rclcpp::Clock>(RCL_ROS_TIME);
   timesource.attachClock(clock);
 
@@ -412,7 +412,7 @@ AmclNode::AmclNode(std::shared_ptr<rclcpp::Node> node_, bool use_map_topic) :
   node->get_parameter_or("odom_alpha3", alpha3_, 0.2);
   node->get_parameter_or("odom_alpha4", alpha4_, 0.2);
   node->get_parameter_or("odom_alpha5", alpha5_, 0.2);
-  
+
   node->get_parameter_or("do_beamskip", do_beamskip_, false);
   node->get_parameter_or("beam_skip_distance", beam_skip_distance_, 0.5);
   node->get_parameter_or("beam_skip_threshold", beam_skip_threshold_, 0.3);
@@ -476,15 +476,15 @@ AmclNode::AmclNode(std::shared_ptr<rclcpp::Node> node_, bool use_map_topic) :
     double bag_scan_period;
     node->get_parameter_or("bag_scan_period", bag_scan_period, -1.0);
     bag_scan_period_.fromSec(bag_scan_period);
-  }
+  }`
   */
 
   updatePoseFromServer();
- 
+
 
   cloud_pub_interval = tf2::durationFromSec(1.0);
   tfb_ = new tf2_ros::TransformBroadcaster(node);
-  tf2_buffer_ = new tf2_ros::Buffer();
+  tf2_buffer_ = new tf2_ros::Buffer(clock);
   tf2_buffer_->setUsingDedicatedThread(true);
   tfl_ = new tf2_ros::TransformListener(*tf2_buffer_, node, false);
 
@@ -618,16 +618,16 @@ void AmclNode::reconfigureCB(AMCLConfig &config, uint32_t level)
   alpha_fast_ = config.recovery_alpha_fast;
   tf_broadcast_ = config.tf_broadcast;
 
-  do_beamskip_= config.do_beamskip; 
-  beam_skip_distance_ = config.beam_skip_distance; 
-  beam_skip_threshold_ = config.beam_skip_threshold; 
+  do_beamskip_= config.do_beamskip;
+  beam_skip_distance_ = config.beam_skip_distance;
+  beam_skip_threshold_ = config.beam_skip_threshold;
 
   pf_ = pf_alloc(min_particles_, max_particles_,
                  alpha_slow_, alpha_fast_,
                  (pf_init_model_fn_t)AmclNode::uniformPoseGenerator,
                  (void *)map_);
-  pf_err_ = config.kld_err; 
-  pf_z_ = config.kld_z; 
+  pf_err_ = config.kld_err;
+  pf_z_ = config.kld_z;
   pf_->pop_err = pf_err_;
   pf_->pop_z = pf_z_;
 
@@ -659,8 +659,8 @@ void AmclNode::reconfigureCB(AMCLConfig &config, uint32_t level)
   else if(laser_model_type_ == LASER_MODEL_LIKELIHOOD_FIELD_PROB){
     ROS_INFO("Initializing likelihood field model; this can take some time on large maps...");
     laser_->SetModelLikelihoodFieldProb(z_hit_, z_rand_, sigma_hit_,
-					laser_likelihood_max_dist_, 
-					do_beamskip_, beam_skip_distance_, 
+					laser_likelihood_max_dist_,
+					do_beamskip_, beam_skip_distance_,
 					beam_skip_threshold_, beam_skip_error_threshold_);
     ROS_INFO("Done initializing likelihood field model with probabilities.");
   }
@@ -676,10 +676,10 @@ void AmclNode::reconfigureCB(AMCLConfig &config, uint32_t level)
   global_frame_id_ = config.global_frame_id;
 
   delete laser_scan_filter_;
-  laser_scan_filter_ = 
-          new tf::MessageFilter<sensor_msgs::msg::LaserScan>(*laser_scan_sub_, 
-                                                        *tf_, 
-                                                        odom_frame_id_, 
+  laser_scan_filter_ =
+          new tf::MessageFilter<sensor_msgs::msg::LaserScan>(*laser_scan_sub_,
+                                                        *tf_,
+                                                        odom_frame_id_,
                                                         100);
   laser_scan_filter_->registerCallback(std::bind(&AmclNode::laserReceived,
                                                    this, _1));
@@ -817,7 +817,7 @@ void AmclNode::updatePoseFromServer()
   node->get_parameter_or("initial_pose_x", tmp_pos, init_pose_[0]);
   if(!std::isnan(tmp_pos))
     init_pose_[0] = tmp_pos;
-  else 
+  else
     ROS_WARN("ignoring NAN in initial pose X position");
   node->get_parameter_or("initial_pose_y", tmp_pos, init_pose_[1]);
   if(!std::isnan(tmp_pos))
@@ -846,7 +846,7 @@ void AmclNode::updatePoseFromServer()
     ROS_WARN("ignoring NAN in initial covariance AA");
 }
 
-void 
+void
 AmclNode::checkLaserReceived()
 {
   tf2::Duration d = tf2_ros::fromMsg(clock->now()) - last_laser_received_ts_;
@@ -974,8 +974,8 @@ AmclNode::handleMapMessage(const nav_msgs::msg::OccupancyGrid& msg)
   else if(laser_model_type_ == LASER_MODEL_LIKELIHOOD_FIELD_PROB){
     ROS_INFO("Initializing likelihood field model; this can take some time on large maps...");
     laser_->SetModelLikelihoodFieldProb(z_hit_, z_rand_, sigma_hit_,
-					laser_likelihood_max_dist_, 
-					do_beamskip_, beam_skip_distance_, 
+					laser_likelihood_max_dist_,
+					do_beamskip_, beam_skip_distance_,
 					beam_skip_threshold_, beam_skip_error_threshold_);
     ROS_INFO("Done initializing likelihood field model.");
   }
@@ -1229,7 +1229,7 @@ AmclNode::laserReceived(const std::shared_ptr<sensor_msgs::msg::LaserScan> laser
     ROS_ERROR("Couldn't determine robot's pose associated with laser scan");
     return;
   }
- 
+
   pf_vector_t delta = pf_vector_zero();
 
   if(pf_init_)
