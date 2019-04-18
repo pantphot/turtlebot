@@ -87,27 +87,27 @@ def launch(launch_descriptor, argv):
         name='static_tf_pub_rgb_depth',
         exit_handler=restart_exit_handler,
     )
-    package = 'joy'
-    ld.add_process(
-        cmd=[get_executable_path(package_name=package, executable_name='joy_node')],
-        name='joy_node',
-        exit_handler=restart_exit_handler,
-    )
-    package = 'teleop_twist_joy'
-    ld.add_process(
-        cmd=[get_executable_path(package_name=package, executable_name='teleop_node')],
-        name='teleop_node',
-        exit_handler=restart_exit_handler,
-    )
-    turtlebot2_amcl_share = get_package_share_directory('turtlebot2_amcl')
-    map_path = os.path.join(turtlebot2_amcl_share, 'examples', 'osrf_map.yaml')
-    if args.map:
-        map_path = args.map
-    package = 'map_server'
-    ld.add_process(
-        cmd=[get_executable_path(package_name=package, executable_name='map_server'), map_path],
-        name='map_server',
-    )
+    # package = 'joy'
+    # ld.add_process(
+    #     cmd=[get_executable_path(package_name=package, executable_name='joy_node')],
+    #     name='joy_node',
+    #     exit_handler=restart_exit_handler,
+    # )
+    # package = 'teleop_twist_joy'
+    # ld.add_process(
+    #     cmd=[get_executable_path(package_name=package, executable_name='teleop_node')],
+    #     name='teleop_node',
+    #     exit_handler=restart_exit_handler,
+    # )
+    # turtlebot2_amcl_share = get_package_share_directory('turtlebot2_amcl')
+    # map_path = os.path.join(turtlebot2_amcl_share, 'examples', 'osrf_map.yaml')
+    # if args.map:
+    #     map_path = args.map
+    # package = 'map_server'
+    # ld.add_process(
+    #     cmd=[get_executable_path(package_name=package, executable_name='map_server'), map_path],
+    #     name='map_server',
+    # )
     package = 'amcl'
     ld.add_process(
         cmd=[get_executable_path(package_name=package, executable_name='amcl'), '--use-map-topic'],
