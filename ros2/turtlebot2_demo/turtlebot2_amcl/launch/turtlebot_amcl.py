@@ -17,7 +17,7 @@ import os
 import sys
 
 from ament_index_python.packages import get_package_share_directory
-from launch,legacy import LaunchDescriptor
+from launch.legacy import LaunchDescriptor
 from launch.legacy.exit_handler import restart_exit_handler
 from launch.legacy.launcher import DefaultLauncher
 from launch.legacy.output_handler import ConsoleOutput
