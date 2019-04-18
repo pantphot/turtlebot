@@ -68,7 +68,7 @@ def launch(launch_descriptor, argv):
             'map',
             'base_link'
         ],
-        name='static_tf_pub_base_rgb',
+        name='static_tf_pub_map',
         exit_handler=restart_exit_handler,
     )
 
