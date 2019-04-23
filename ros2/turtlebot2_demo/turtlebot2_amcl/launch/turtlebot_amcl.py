@@ -25,11 +25,11 @@ from ros2run.api import get_executable_path
 
 
 def launch(launch_descriptor, argv):
-    # parser = argparse.ArgumentParser(description='launch amcl turtlebot demo')
-    # parser.add_argument(
-    #     '--map',
-    #     help='path to map (will be passed to map_server)')
-    # args = parser.parse_args(argv)
+    parser = argparse.ArgumentParser(description='launch amcl turtlebot demo')
+    parser.add_argument(
+         '--map',
+         help='path to map (will be passed to map_server)')
+    args = parser.parse_args(argv)
 
     ld = launch_descriptor
 
@@ -63,23 +63,6 @@ def launch(launch_descriptor, argv):
         cmd=[
             get_executable_path(
                 package_name=package, executable_name='static_transform_publisher'),
-            '0', '0', '0',
-            '0', '0', '0', '0',
-            'map',
-            'base_link'
-        ],
-        name='static_tf_pub_map',
-        exit_handler=restart_exit_handler,
-    )
-
-    package = 'tf2_ros'
-    ld.add_process(
-        # The XYZ/Quat numbers for base_link -> camera_rgb_frame are taken from the
-        # turtlebot URDF in
-        # https://github.com/turtlebot/turtlebot/blob/931d045/turtlebot_description/urdf/sensors/astra.urdf.xacro
-        cmd=[
-            get_executable_path(
-                package_name=package, executable_name='static_transform_publisher'),
             '-0.087', '-0.0125', '0.287',
             '0', '0', '0', '1',
             'base_link',
@@ -104,31 +87,17 @@ def launch(launch_descriptor, argv):
         name='static_tf_pub_rgb_depth',
         exit_handler=restart_exit_handler,
     )
-    # package = 'joy'
-    # ld.add_process(
-    #     cmd=[get_executable_path(package_name=package, executable_name='joy_node')],
-    #     name='joy_node',
-    #     exit_handler=restart_exit_handler,
-    # )
-    # package = 'teleop_twist_joy'
-    # ld.add_process(
-    #     cmd=[get_executable_path(package_name=package, executable_name='teleop_node')],
-    #     name='teleop_node',
-    #     exit_handler=restart_exit_handler,
-    # )
-    # turtlebot2_amcl_share = get_package_share_directory('turtlebot2_amcl')
-    # map_path = os.path.join(turtlebot2_amcl_share, 'examples', 'osrf_map.yaml')
-    # if args.map:
-    #     map_path = args.map
-    # package = 'map_server'
-    # ld.add_process(
-    #     cmd=[get_executable_path(package_name=package, executable_name='map_server'), map_path],
-    #     name='map_server',
-    # )
     package = 'amcl'
     ld.add_process(
         cmd=[get_executable_path(package_name=package, executable_name='amcl'), '--use-map-topic'],
         name='amcl',
+        exit_handler=restart_exit_handler,
+        output_handlers=[ConsoleOutput()],
+    )
+    package = 'ros1_bridge'
+    ld.add_process(
+        cmd=[get_executable_path(package_name=package, executable_name='dynamic_bridge'), '--bridge-all-topics'],
+        name='ros_bridge',
         exit_handler=restart_exit_handler,
         output_handlers=[ConsoleOutput()],
     )
