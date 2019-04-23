@@ -87,13 +87,13 @@ def launch(launch_descriptor, argv):
         name='static_tf_pub_rgb_depth',
         exit_handler=restart_exit_handler,
     )
-    package = 'amcl'
-    ld.add_process(
-        cmd=[get_executable_path(package_name=package, executable_name='amcl'), '--use-map-topic'],
-        name='amcl',
-        exit_handler=restart_exit_handler,
-        output_handlers=[ConsoleOutput()],
-    )
+#    package = 'amcl'
+#    ld.add_process(
+#        cmd=[get_executable_path(package_name=package, executable_name='amcl'), '--use-map-topic'],
+#        name='amcl',
+#        exit_handler=restart_exit_handler,
+#        output_handlers=[ConsoleOutput()],
+#    )
     package = 'ros1_bridge'
     ld.add_process(
         cmd=[get_executable_path(package_name=package, executable_name='dynamic_bridge'), '--bridge-all-topics'],
