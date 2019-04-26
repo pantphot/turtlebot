@@ -84,7 +84,7 @@ int main(int argc, char * argv[])
   auto node = rclcpp::Node::make_shared("kobuki_node");
   g_logger = node->get_logger();
   auto cmd_vel_sub = node->create_subscription<geometry_msgs::msg::Twist>(
-    "cmd_vel", cmdVelCallback, cmd_vel_qos_profile);
+    "navigation_velocity_smoother/raw_cmd_vel", cmdVelCallback, cmd_vel_qos_profile);
   auto odom_pub = node->create_publisher<nav_msgs::msg::Odometry>("odom", odom_and_imu_qos_profile);
   auto imu_pub = node->create_publisher<sensor_msgs::msg::Imu>("imu", odom_and_imu_qos_profile);
   tf2_ros::TransformBroadcaster br(node);
