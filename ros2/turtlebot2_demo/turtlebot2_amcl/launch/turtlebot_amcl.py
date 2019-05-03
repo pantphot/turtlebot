@@ -77,7 +77,7 @@ def launch(launch_descriptor, argv):
         cmd=[
             get_executable_path(
                 package_name=package, executable_name='static_transform_publisher'),
-            '-0.087', '-0.0125', '0.287',
+            '0.00', '0.00', '0.287',
             '0', '0', '0', '1',
             'base_footprint',
             'camera_rgb_frame'
